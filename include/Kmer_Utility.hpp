@@ -9,6 +9,10 @@
 #include <cstdint>
 
 
+namespace cuttlefish
+{
+
+
 class Kmer_Utility
 {
 private:
@@ -140,6 +144,9 @@ inline uint64_t Kmer_Utility::base_reverse(const uint64_t val)
 
 
     return 0;
+}
+
+
 }
 
 

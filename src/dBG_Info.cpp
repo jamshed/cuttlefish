@@ -11,6 +11,10 @@
 #include <fstream>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 dBG_Info<k>::dBG_Info(const std::string& file_path):
     file_path_(file_path)
@@ -133,3 +137,6 @@ void dBG_Info<k>::dump_info() const
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, dBG_Info)
+
+
+}

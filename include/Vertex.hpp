@@ -10,6 +10,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k> class CdBG;
 
 
@@ -81,6 +85,9 @@ inline cuttlefish::base_t Vertex::back() const
 inline bool Vertex::outputted() const
 {
     return outputted_;
+}
+
+
 }
 
 

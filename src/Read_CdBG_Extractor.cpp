@@ -7,6 +7,10 @@
 #include "Thread_Pool.hpp"
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 Read_CdBG_Extractor<k>::Read_CdBG_Extractor(const Build_Params& params, Kmer_Hash_Table<k, cuttlefish::BITS_PER_READ_KMER>& hash_table):
     Read_CdBG_Extractor(params, hash_table, nullptr)
@@ -181,3 +185,6 @@ uint64_t Read_CdBG_Extractor<k>::vertex_count() const
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, Read_CdBG_Extractor)
+
+
+}

@@ -9,6 +9,10 @@
 #include <chrono>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 void CdBG<k>::classify_vertices()
 {
@@ -611,3 +615,6 @@ bool CdBG<k>::process_isolated_kmer(const Directed_Kmer<k>& kmer)
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, CdBG)
+
+
+}

@@ -11,6 +11,10 @@
 #include <iomanip>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 void CdBG<k>::output_maximal_unitigs()
 {
@@ -661,3 +665,6 @@ void CdBG<k>::flush_path_loggers()
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, CdBG)
+
+
+}

@@ -12,6 +12,10 @@
 #include <cstddef>
 
 
+namespace cuttlefish
+{
+
+
 template <typename T_seq_, uint16_t k, bool is_canonical_> class Minimizer_Iterator;
 
 
@@ -143,6 +147,9 @@ inline cuttlefish::minimizer_t Minimizer_Utility::canonical_minimizer(const Kmer
 
     const auto h_f = hash(min_f), h_r = hash(min_r);
     return h_f != h_r ? (h_f < h_r ? min_f : min_r) : std::min(min_f, min_r);
+}
+
+
 }
 
 

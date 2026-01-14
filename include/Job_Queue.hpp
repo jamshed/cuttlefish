@@ -11,6 +11,10 @@
 #include <queue>
 
 
+namespace cuttlefish
+{
+
+
 // A very basic single-producer single-consumer job queue — for jobs with
 // id's and additional information of types  `T_id_` and `T_info_`, respectively.
 template <typename T_id_, typename T_info_>
@@ -141,6 +145,9 @@ template <typename T_id_, typename T_info_>
 inline uint64_t Job_Queue<T_id_, T_info_>::next_job_to_post() const
 {
     return jobs_posted + 1;
+}
+
+
 }
 
 

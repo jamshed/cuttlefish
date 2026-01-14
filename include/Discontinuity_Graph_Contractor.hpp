@@ -21,11 +21,12 @@
 #include <cassert>
 
 
-class Data_Logistics;
-
-
 namespace cuttlefish
 {
+
+
+class Data_Logistics;
+
 
 // =============================================================================
 // Contractor of discontinuity-graphs.

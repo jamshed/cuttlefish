@@ -24,12 +24,11 @@
 #include <atomic>
 
 
-class Data_Logistics;
-
-
 namespace cuttlefish
 {
 
+
+class Data_Logistics;
 class Vertex_Color_Mapping;
 
 

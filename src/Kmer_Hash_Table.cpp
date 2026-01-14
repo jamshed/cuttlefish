@@ -10,6 +10,10 @@
 #include <cstdio>
 
 
+namespace cuttlefish
+{
+
+
 
 template <uint16_t k, uint8_t BITS_PER_KEY> constexpr double Kmer_Hash_Table<k, BITS_PER_KEY>::gamma_min;
 template <uint16_t k, uint8_t BITS_PER_KEY> constexpr double Kmer_Hash_Table<k, BITS_PER_KEY>::gamma_max;
@@ -237,3 +241,6 @@ Kmer_Hash_Table<k, BITS_PER_KEY>::~Kmer_Hash_Table()
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE_PER_BIT, Kmer_Hash_Table)
+
+
+}

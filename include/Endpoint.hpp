@@ -12,6 +12,10 @@
 #include <cstdint>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k, uint8_t BITS_PER_KEY> class Kmer_Hash_Table;
 
 
@@ -183,6 +187,9 @@ template <uint16_t k>
 inline uint64_t Endpoint<k>::hash() const
 {
     return v.hash();
+}
+
+
 }
 
 

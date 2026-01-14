@@ -9,6 +9,10 @@
 #include <cstdint>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k, uint64_t seed = 0xAAAAAAAA55555555ULL>
 class Kmer_Hasher
 {
@@ -35,6 +39,9 @@ public:
         */
     }
 };
+
+
+}
 
 
 

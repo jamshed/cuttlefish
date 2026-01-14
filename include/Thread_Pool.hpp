@@ -13,6 +13,10 @@
 #include <thread>
 
 
+namespace cuttlefish
+{
+
+
 // A basic thread pool class to support avoidance of latency incurred with frequent
 // construction and destruction of threads throughout the compaction algorithm.
 template <uint16_t k>
@@ -105,6 +109,9 @@ public:
     // Closes the thread pool.
     void close();
 };
+
+
+}
 
 
 

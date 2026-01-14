@@ -25,7 +25,6 @@ set(PROJECT_SRC
         Vertex.cpp
         State.cpp
         Kmer_Container.cpp
-        Kmer_SPSC_Iterator.cpp
         # Kmer_Hash_Table.cpp
         # CdBG.cpp
         # CdBG_Builder.cpp
@@ -42,7 +41,6 @@ set(PROJECT_SRC
         Maximal_Unitig_Scratch.cpp
         Unipaths_Meta_info.cpp
         Data_Logistics.cpp
-        dBG_Utilities.cpp
         Character_Buffer_Flusher.cpp
         Progress_Tracker.cpp
         dBG_Info.cpp
@@ -54,7 +52,6 @@ set(PROJECT_SRC
         # Kmer_Index.cpp
         # Kmer_Index_Utility.cpp
         Minimizer_Instance_Iterator.cpp
-        Multiway_Merger.cpp
         Discontinuity_Graph_Bootstrap.cpp
         dBG_Contractor.cpp
         Parser.cpp

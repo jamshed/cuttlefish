@@ -5,6 +5,10 @@
 #include "globals.hpp"
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 kmer_Enumeration_Stats<k>::kmer_Enumeration_Stats(const KMC::Stage1Results& stage1_results, const KMC::Stage2Results& stage2_results, const std::size_t max_memory, const std::size_t db_size):
     stage1_results(stage1_results),
@@ -100,3 +104,6 @@ void kmer_Enumeration_Stats<k>::log_stats() const
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE_ALL, kmer_Enumeration_Stats)
+
+
+}

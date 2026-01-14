@@ -7,6 +7,10 @@
 #include "Kmer_Index.hpp"
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k, template <uint16_t> typename T_App>
 Application<k, T_App>::Application(const Build_Params& params):
 #ifndef FIXED_K
@@ -74,3 +78,6 @@ bool Application<k, T_App>::validate() const
 // template class Application<cuttlefish::MAX_K, Read_CdBG>;
 // template class Application<cuttlefish::MAX_K, Kmer_Index>;
 template class Application<cuttlefish::MAX_K, cuttlefish::dBG_Contractor>;
+
+
+}

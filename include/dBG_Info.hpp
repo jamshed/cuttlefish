@@ -10,6 +10,10 @@
 #include <string>
 
 
+namespace cuttlefish
+{
+
+
 // Forward declarations.
 template <uint16_t k> class Read_CdBG_Constructor;
 template <uint16_t k> class Read_CdBG_Extractor;
@@ -73,6 +77,9 @@ public:
     // Writes the JSON object to its corresponding disk-file.
     void dump_info() const;
 };
+
+
+}
 
 
 

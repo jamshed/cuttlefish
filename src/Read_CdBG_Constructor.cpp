@@ -7,6 +7,10 @@
 #include <chrono>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 Read_CdBG_Constructor<k>::Read_CdBG_Constructor(const Build_Params& params, Kmer_Hash_Table<k, cuttlefish::BITS_PER_READ_KMER>& hash_table):
     params(params),
@@ -211,3 +215,6 @@ uint64_t Read_CdBG_Constructor<k>::edge_count() const
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, Read_CdBG_Constructor)
+
+
+}

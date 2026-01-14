@@ -10,6 +10,10 @@
 #include <cstddef>
 
 
+namespace cuttlefish
+{
+
+
 // A class to wrap summary statistics of k-mer enumeration by `kmer_Enumerator`.
 template <uint16_t k>
 class kmer_Enumeration_Stats
@@ -67,6 +71,9 @@ public:
     // Logs a summary statistics of the execution.
     void log_stats() const;
 };
+
+
+}
 
 
 

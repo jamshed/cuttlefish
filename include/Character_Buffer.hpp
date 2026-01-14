@@ -16,6 +16,10 @@
 #include <cstdlib>
 
 
+namespace cuttlefish
+{
+
+
 // A buffer class to contain contiguous characters. It flushes to a sink of
 // type `T_sink_` when it overflows or is destructed. Writing to the provided
 // sink (in the constructor) is thread-safe.
@@ -234,6 +238,9 @@ inline void Character_Buffer_Flusher<Async_Logger_Wrapper>::write(std::string& b
     buf.push_back('\0');
 
     sink.write(buf.data());
+}
+
+
 }
 
 

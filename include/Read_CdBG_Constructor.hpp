@@ -16,6 +16,10 @@
 #include <string>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k> class Kmer_SPMC_Iterator;
 template <uint16_t k> class Thread_Pool;
 
@@ -237,6 +241,9 @@ bool Read_CdBG_Constructor<k>::add_path_cover_edge(const Edge<k>& e)
     st_v.update_edge_at(e.v().side(), e.v().edge());
 
     return hash_table.update_concurrent(bucket_u, bucket_v);
+}
+
+
 }
 
 

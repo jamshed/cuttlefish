@@ -9,6 +9,10 @@
 #include <optional>
 
 
+namespace cuttlefish
+{
+
+
 // A class to pack the input sequences.
 class Seq_Input
 {
@@ -44,6 +48,9 @@ public:
     // Returns whether the sequence collection is empty or not.
     bool empty() const;
 };
+
+
+}
 
 
 

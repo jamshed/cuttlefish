@@ -4,6 +4,10 @@
 #include "Annotated_Kmer.hpp"
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 void CdBG<k>::output_plain_off_substring(const uint16_t thread_id, const char* const seq, const size_t seq_len, const size_t left_end, const size_t right_end)
 {
@@ -200,3 +204,6 @@ void CdBG<k>::write_path(const uint16_t thread_id, const char* const seq, const 
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, CdBG)
+
+
+}

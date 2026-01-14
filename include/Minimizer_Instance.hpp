@@ -6,13 +6,16 @@
 
 
 
-#include "Min_Heap.hpp"
 #include "globals.hpp"
 
 #include <cstdint>
 #include <cstddef>
 #include <vector>
 #include <utility>
+
+
+namespace cuttlefish
+{
 
 
 // =============================================================================
@@ -59,6 +62,9 @@ public:
         return minimizer_ != rhs.minimizer_ ? (minimizer_ < rhs.minimizer_) : (offset_ < rhs.offset_);
     }
 };
+
+
+}
 
 
 

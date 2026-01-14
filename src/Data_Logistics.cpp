@@ -5,6 +5,10 @@
 #include "utility.hpp"
 
 
+namespace cuttlefish
+{
+
+
 Data_Logistics::Data_Logistics(const Build_Params& build_params):
     params(build_params)
 {}
@@ -95,4 +99,7 @@ const std::string Data_Logistics::edge_path_info_buckets_path() const
 const std::string Data_Logistics::unitig_coord_buckets_path() const
 {
     return params.working_dir_path() + filename(params.output_prefix()) + cuttlefish::file_ext::unitig_coord_bucket_ext;
+}
+
+
 }

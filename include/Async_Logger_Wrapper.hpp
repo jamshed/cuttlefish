@@ -12,6 +12,10 @@
 #include <string>
 
 
+namespace cuttlefish
+{
+
+
 // A class wrapping the `spdlog` library's asynchronous logger.
 class Async_Logger_Wrapper
 {
@@ -50,6 +54,9 @@ public:
 inline void Async_Logger_Wrapper::write(const char* const str) const
 {
     logger->info(str);
+}
+
+
 }
 
 

@@ -11,6 +11,10 @@
 #include <string>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k> class Kmer_Iterator;
 template <uint16_t k> class Kmer_Buffered_Iterator;
 template <uint16_t k> class Kmer_SPMC_Iterator;
@@ -81,6 +85,9 @@ public:
     // k-mer database, that can support `consumer_count` consumers.
     spmc_iterator spmc_end(size_t consumer_count) const;
 };
+
+
+}
 
 
 

@@ -8,6 +8,10 @@
 #include <cstdint>
 
 
+namespace cuttlefish
+{
+
+
 // Wrapper over the parameters for the classification task.
 struct Classification_Task_Params
 {
@@ -57,6 +61,9 @@ struct Read_dBG_Compaction_Params
         thread_id(thread_id)
     {}
 };
+
+
+}
 
 
 

@@ -8,6 +8,10 @@
 #include <fstream>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 void Validator<k>::validate_sequence_completion(bool& result)
 {
@@ -253,3 +257,6 @@ bool Validator<k>::walk_unitig(const char* const seq, const size_t seq_len, cons
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, Validator)
+
+
+}

@@ -5,6 +5,10 @@
 #include "kmer_Enumeration_Stats.hpp"
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k> const std::size_t kmer_Enumerator<k>::min_memory;
 
 
@@ -86,3 +90,6 @@ std::size_t kmer_Enumerator<k>::memory_limit(const uint64_t unique_kmer_count, c
 
 // Template instantiations for the required instances. 
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE_ALL, kmer_Enumerator)
+
+
+}

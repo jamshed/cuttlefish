@@ -16,6 +16,10 @@
 #include <cassert>
 
 
+namespace cuttlefish
+{
+
+
 // =============================================================================
 // A class to keep scratch data for building maximal unitigs from two of its
 // constituent unitigs that cover it and overlap at a meeting-point vertex.
@@ -360,6 +364,9 @@ inline void Maximal_Unitig_Scratch<k>::get_vertices_and_hashes(std::vector<Kmer<
         H.insert(H.end(), h.cbegin() + pivot, h.cend());
         H.insert(H.end(), h.cbegin(), h.cbegin() + pivot);
     }
+}
+
+
 }
 
 

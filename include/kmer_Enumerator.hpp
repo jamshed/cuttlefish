@@ -13,6 +13,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k> class kmer_Enumeration_Stats;
 
 
@@ -85,6 +89,9 @@ class FunnyProgress: public KMC::IPercentProgressObserver
         
     }
 };
+
+
+}
 
 
 

@@ -6,6 +6,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 // Declare the type of file handler and the read() function.
 // Required for FASTA/FASTQ file reading using the kseq library.
 KSEQ_INIT(gzFile, gzread)
@@ -138,4 +142,7 @@ void Ref_Parser::close()
 
         std::cerr << "\rClosed reference " << curr_ref() << ".\n";
     }
+}
+
+
 }

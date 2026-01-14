@@ -29,6 +29,10 @@
 #include <fstream>
 
 
+namespace cuttlefish
+{
+
+
 // =============================================================================
 
 
@@ -517,6 +521,9 @@ inline bool Kmer_Index<k>::align(const Kmer<k>& kmer, const std::size_t idx) con
             return false;
 
     return true;
+}
+
+
 }
 
 

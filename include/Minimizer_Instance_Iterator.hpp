@@ -16,6 +16,10 @@
 #include <cstdio>
 
 
+namespace cuttlefish
+{
+
+
 // =============================================================================
 
 
@@ -271,6 +275,9 @@ inline void Minimizer_Instance_Iterator<std::FILE*>::advance_minimizer_block()
     const cuttlefish::minimizer_t min = elem.minimizer();
     while(file_ptr != nullptr && min == elem.minimizer())
         advance();
+}
+
+
 }
 
 

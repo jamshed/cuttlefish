@@ -8,6 +8,10 @@
 #include <cmath>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 Unipaths_Meta_info<k>::Unipaths_Meta_info():
     unipath_count_(0),
@@ -123,3 +127,6 @@ void Unipaths_Meta_info<k>::print() const
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, Unipaths_Meta_info)
+
+
+}

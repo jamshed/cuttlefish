@@ -4,6 +4,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 Minimizer_Instance_Iterator<std::FILE*>::Minimizer_Instance_Iterator():
     file_ptr(nullptr),
     pos(0),
@@ -67,4 +71,7 @@ void Minimizer_Instance_Iterator<std::FILE*>::peek()
 
     if(next_ch == EOF)
         file_ptr = nullptr;
+}
+
+
 }

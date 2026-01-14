@@ -11,6 +11,10 @@
 #include <string>
 
 
+namespace cuttlefish
+{
+
+
 // A basic sink wrapper with minimal functionality — open, get reference to the wrapped sink, and close.
 template <typename T_sink_>
 class Output_Sink
@@ -72,6 +76,9 @@ public:
         output_.close_logger();
     }
 };
+
+
+}
 
 
 

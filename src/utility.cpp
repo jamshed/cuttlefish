@@ -13,6 +13,10 @@
 #include <cstdio>
 
 
+namespace cuttlefish
+{
+
+
 std::string get_random_string(const size_t len, const char* const alphabet)
 {
     std::string str;
@@ -213,4 +217,7 @@ std::size_t process_peak_memory()
 std::size_t process_cur_memory()
 {
     return process_metric("VmRSS:") * 1024;
+}
+
+
 }

@@ -19,6 +19,10 @@
 #include <string>
 
 
+namespace cuttlefish
+{
+
+
 class Build_Params;
 
 
@@ -346,6 +350,9 @@ template <uint16_t k, uint8_t BITS_PER_KEY>
 inline uint64_t Kmer_Hash_Table<k, BITS_PER_KEY>::size() const
 {
     return kmer_count;
+}
+
+
 }
 
 

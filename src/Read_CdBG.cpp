@@ -11,6 +11,10 @@
 #include <limits>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 Read_CdBG<k>::Read_CdBG(const Build_Params& params):
     Read_CdBG(params, nullptr)
@@ -228,3 +232,6 @@ std::size_t Read_CdBG<k>::max_disk_usage(const kmer_Enumeration_Stats<k + 1>& ed
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, Read_CdBG)
+
+
+}

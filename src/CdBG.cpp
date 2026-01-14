@@ -8,6 +8,10 @@
 #include <cstdlib>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k> 
 CdBG<k>::CdBG(const Build_Params& params):
     CdBG(params, nullptr)
@@ -206,3 +210,6 @@ uint64_t CdBG<k>::vertex_count() const
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, CdBG)
+
+
+}

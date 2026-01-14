@@ -5,6 +5,10 @@
 #include "globals.hpp"
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 Kmer_Container<k>::Kmer_Container(const std::string& kmc_file_path):
     kmc_file_path(kmc_file_path)
@@ -144,3 +148,6 @@ typename Kmer_Container<k>::spmc_iterator Kmer_Container<k>::spmc_end(const size
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE_ALL, Kmer_Container)
+
+
+}

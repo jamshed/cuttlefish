@@ -6,6 +6,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 Build_Params::Build_Params( const bool is_read_graph,
                             const bool is_ref_graph,
                             const std::vector<std::string>& seq_paths,
@@ -21,7 +25,7 @@ Build_Params::Build_Params( const bool is_read_graph,
                             const bool idx,
                             const uint16_t min_len,
                             const std::string& output_file_path,
-                            const std::optional<cuttlefish::Output_Format> output_format,
+                            const std::optional<Output_Format> output_format,
                             const bool track_short_seqs,
                             const bool poly_n_stretch,
                             const std::string& working_dir_path,
@@ -51,18 +55,18 @@ Build_Params::Build_Params( const bool is_read_graph,
 const std::string Build_Params::output_file_ext() const
 {
     if(is_read_graph() || is_ref_graph())
-        return cuttlefish::file_ext::unipaths_ext;
+        return file_ext::unipaths_ext;
 
     switch(output_format())
     {
-    case cuttlefish::Output_Format::fa:
-        return cuttlefish::file_ext::unipaths_ext;
+    case Output_Format::fa:
+        return file_ext::unipaths_ext;
 
-    case cuttlefish::Output_Format::gfa1:
-        return cuttlefish::file_ext::gfa1_ext;
+    case Output_Format::gfa1:
+        return file_ext::gfa1_ext;
 
-    case cuttlefish::Output_Format::gfa2:
-        return cuttlefish::file_ext::gfa2_ext;
+    case Output_Format::gfa2:
+        return file_ext::gfa2_ext;
 
     default:
         break;
@@ -150,7 +154,7 @@ bool Build_Params::is_valid() const
 
 
     // Invalid output formats are to be discarded.
-    if(output_format() >= cuttlefish::num_op_formats)
+    if(output_format() >= num_op_formats)
     {
         std::cerr << "Invalid output file format.\n";
         valid = false;
@@ -163,4 +167,7 @@ bool Build_Params::is_valid() const
 
 
     return valid;
+}
+
+
 }

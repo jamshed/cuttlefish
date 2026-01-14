@@ -2,6 +2,10 @@
 #include "Progress_Tracker.hpp"
 
 
+namespace cuttlefish
+{
+
+
 void Progress_Tracker::setup(uint64_t total_work_load, uint64_t work_chunk_threshold, const std::string& log_message)
 {
     this->total_work_load = total_work_load;
@@ -13,4 +17,7 @@ void Progress_Tracker::setup(uint64_t total_work_load, uint64_t work_chunk_thres
     this->log_message = log_message;
 
     std::cerr << "\n";
+}
+
+
 }

@@ -16,6 +16,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 // =============================================================================
 
 // TODO: better document and better log messages.
@@ -406,7 +410,10 @@ bool Index_Validator<k, l>::validate(const std::string& seq_path, const std::str
 
 
         return validate(seq_path, idx_path);
-    }
+    }1
+}
+
+
 }
 
 

@@ -22,6 +22,10 @@
 #include <chrono>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 Kmer_Index<k>::Kmer_Index(const uint16_t l, const uint16_t producer_count, const bool retain, const std::string& output_pref, const std::string& working_dir, const std::optional<Build_Params> params):
     // TODO: reserve space for `paths`, preferably from additional k-mer count field
@@ -641,3 +645,6 @@ void Kmer_Index<k>::close_output() const
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, Kmer_Index)
+
+
+}

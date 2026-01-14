@@ -8,6 +8,10 @@
 #include <fstream>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 void Validator<k>::build_mph_function()
 {
@@ -67,3 +71,6 @@ void Validator<k>::clear()
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, Validator)
+
+
+}

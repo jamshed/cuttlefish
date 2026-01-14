@@ -12,6 +12,10 @@
 #include <cassert>
 
 
+namespace cuttlefish
+{
+
+
 class DNA_Utility
 {
 private:
@@ -221,6 +225,9 @@ public:
 
     template <typename T_> static auto map_base(T_) = delete;
 };
+
+
+}
 
 
 

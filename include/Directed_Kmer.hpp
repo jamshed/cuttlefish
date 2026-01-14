@@ -8,6 +8,10 @@
 #include "Kmer.hpp"
 
 
+namespace cuttlefish
+{
+
+
 // K-mer and its reverse complement, canonical form, and direction.
 template <uint16_t k>
 class Directed_Kmer
@@ -108,6 +112,9 @@ template <uint16_t k>
 inline cuttlefish::dir_t Directed_Kmer<k>::dir() const
 {
     return dir_;
+}
+
+
 }
 
 

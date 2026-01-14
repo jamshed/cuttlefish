@@ -4,6 +4,10 @@
 #include "spdlog/sinks/basic_file_sink.h"
 
 
+namespace cuttlefish
+{
+
+
 void Async_Logger_Wrapper::init_logger(const std::string& output_file_path)
 {
     // Instantiate an `spdlog` thread pool for background output operations. The logger constructed with this
@@ -30,4 +34,7 @@ void Async_Logger_Wrapper::close_logger()
 
     logger->flush();
     tp.reset();
+}
+
+
 }

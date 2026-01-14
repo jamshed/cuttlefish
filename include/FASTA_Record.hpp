@@ -15,6 +15,10 @@
 #include <cassert>
 
 
+namespace cuttlefish
+{
+
+
 // =============================================================================
 // A class wrapping a basic FASTA record. The class is specifically designed for
 // writing purposes of output maximal unitigs in the FASTA format.
@@ -155,6 +159,9 @@ inline void FASTA_Record::append_color_list(std::string& buf) const
         buf.push_back(' ');
         buf.append(v.data(), v.size());
     }
+}
+
+
 }
 
 

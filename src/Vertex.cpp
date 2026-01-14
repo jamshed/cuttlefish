@@ -5,6 +5,10 @@
 #include <cassert>
 
 
+namespace cuttlefish
+{
+
+
 Vertex::Vertex(const cuttlefish::State_Class state_class, const cuttlefish::base_t front, const cuttlefish::base_t back):
     state_class_(state_class), front_(front), back_(back), visited_(true), outputted_(false)
 {
@@ -69,4 +73,7 @@ std::ostream& operator <<(std::ostream& out, const Vertex& vertex)
 
     out << label;
     return out;
+}
+
+
 }

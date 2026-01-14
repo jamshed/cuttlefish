@@ -12,6 +12,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 // A basic class to track and display progress for some work.
 class Progress_Tracker
 {
@@ -61,6 +65,9 @@ inline bool Progress_Tracker::track_work(const uint64_t work_chunk_size)
     }
 
     return false;
+}
+
+
 }
 
 

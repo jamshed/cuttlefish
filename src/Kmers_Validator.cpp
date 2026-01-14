@@ -7,6 +7,10 @@
 #include <fstream>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 void Validator<k>::validate_kmer_set(bool& result) const
 {
@@ -83,3 +87,6 @@ void Validator<k>::validate_kmer_set(bool& result) const
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, Validator)
+
+
+}

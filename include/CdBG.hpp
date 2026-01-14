@@ -21,6 +21,10 @@
 #include <utility>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k, uint8_t BITS_PER_KEY> class Kmer_Hash_Table;
 template <uint16_t k> class Directed_Kmer;
 template <uint16_t k> class Annotated_Kmer;
@@ -470,6 +474,9 @@ public:
     // Returns the number of distinct vertices in the underlying graph.
     uint64_t vertex_count() const;
 };
+
+
+}
 
 
 

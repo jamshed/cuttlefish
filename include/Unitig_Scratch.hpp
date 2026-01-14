@@ -13,6 +13,10 @@
 #include <algorithm>
 
 
+namespace cuttlefish
+{
+
+
 // =============================================================================
 // A class to keep scratch data (i.e. working space) for unitigs.
 template <uint16_t k>
@@ -186,6 +190,9 @@ inline void Unitig_Scratch<k>::swap(Unitig_Scratch& rhs)
     V.swap(rhs.V);
 
     std::swap(is_cycle_, rhs.is_cycle_);
+}
+
+
 }
 
 

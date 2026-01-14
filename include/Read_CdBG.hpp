@@ -15,6 +15,10 @@
 #include <memory>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k> class kmer_Enumeration_Stats;
 template <uint16_t k> class Kmer_Index;
 
@@ -105,6 +109,9 @@ private:
     bool DCC_data_structs_exist() const;
 */
 };
+
+
+}
 
 
 

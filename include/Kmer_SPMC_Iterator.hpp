@@ -17,6 +17,10 @@
 #include <thread>
 
 
+namespace cuttlefish
+{
+
+
 // Data required by the consumers to correctly parse raw binary k-mers.
 struct alignas(L1_CACHE_LINE_SIZE)
     Consumer_Data
@@ -376,6 +380,9 @@ template <uint16_t k>
 inline std::size_t Kmer_SPMC_Iterator<k>::memory(const std::size_t consumer_count)
 {
     return CKMC_DB::pref_buf_memory() + (consumer_count * BUF_SZ_PER_CONSUMER);
+}
+
+
 }
 
 

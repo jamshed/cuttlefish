@@ -12,6 +12,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 // =============================================================================
 // A class containing various utility fields and methods for the k-mer indexing
 // scheme of de Bruijn graphs based on minimizers.
@@ -113,6 +117,9 @@ inline int64_t Kmer_Index_Utility::upper_bound(const T_container_& container, in
     }
 
     return result;
+}
+
+
 }
 
 

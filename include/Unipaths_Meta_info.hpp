@@ -10,6 +10,10 @@
 #include <cstdint>
 
 
+namespace cuttlefish
+{
+
+
 // A class to track meta-information over maximal unipaths extracted by some worker thread.
 template <uint16_t k>
 class Unipaths_Meta_info
@@ -104,6 +108,9 @@ inline void Unipaths_Meta_info<k>::add_maximal_unitig(const Maximal_Unitig_Scrat
         dcc_kmer_count_ += maximal_unitig.size();
         dcc_sum_len_ += maximal_unitig.size() + (k - 1);
     }
+}
+
+
 }
 
 

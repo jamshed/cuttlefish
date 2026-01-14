@@ -5,6 +5,10 @@
 #include <cassert>
 
 
+namespace cuttlefish
+{
+
+
 const std::string Kmer_Index_Utility::index_file_path(const std::string& idx_pref)
 {
     return idx_pref + cuttlefish::file_ext::idx_file_ext;
@@ -50,4 +54,7 @@ uint16_t Kmer_Index_Utility::minimizer_len(const std::string& idx_path)
     idx_file.close();
 
     return l;
+}
+
+
 }

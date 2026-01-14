@@ -21,6 +21,10 @@
 #include <string>
 
 
+namespace cuttlefish
+{
+
+
 // Forward declarations.
 template <uint16_t k> class Kmer_SPMC_Iterator;
 template <uint16_t k> class Kmer_Index;
@@ -349,6 +353,9 @@ inline bool Read_CdBG_Extractor<k>::walk_unitig(const Kmer<k>& v_hat, const Stat
 
 
     return true;
+}
+
+
 }
 
 

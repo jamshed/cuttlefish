@@ -111,7 +111,7 @@ int cf_build(int argc, char** argv)
         const auto working_dir = result["work-dir"].as<std::string>();
         const auto path_cover = false;  // result["path-cover"].as<bool>();
 
-        const Build_Params params(  is_read_graph, is_ref_graph,
+        const cuttlefish::Build_Params params(  is_read_graph, is_ref_graph,
                                     seqs, lists, dirs,
                                     k, cutoff,
                                     color,
@@ -147,7 +147,7 @@ int cf_build(int argc, char** argv)
             // (params.is_read_graph() || params.is_ref_graph()) ?
             //     Application<cuttlefish::MAX_K, Read_CdBG>(params).execute() :
             //     Application<cuttlefish::MAX_K, CdBG>(params).execute();
-            Application<cuttlefish::MAX_K, cuttlefish::dBG_Contractor>(params).execute();
+            cuttlefish::Application<cuttlefish::MAX_K, cuttlefish::dBG_Contractor>(params).execute();
 
             std::cout << "\nConstructed the " << dBg_type << " compacted de Bruijn graph at " << output_file << ".\n";
         }

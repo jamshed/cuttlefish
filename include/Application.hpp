@@ -9,6 +9,10 @@
 #include <cstdint>
 
 
+namespace cuttlefish
+{
+
+
 class Build_Params;
 class Validation_Params;
 
@@ -66,6 +70,9 @@ public:
     void execute() const {}
     bool validate() const { return false; }
 };
+
+
+}
 
 
 

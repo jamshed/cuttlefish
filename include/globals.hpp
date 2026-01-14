@@ -10,6 +10,10 @@
 #include <cassert>
 
 
+namespace cuttlefish
+{
+
+
 // The macro `INSTANCE_COUNT` must be set exactly to `(MAX_K + 1) / 2` for a required maximum k-value.
 // Also, the `MAX_K` value must be odd (as the k-values used in the algorithm) for correct results.
 // TODO: use more user-friendly `MAX_K` definition as compile flag, and set `INSTANCE_COUNT` internally.
@@ -38,6 +42,9 @@ namespace DNA
 
 // Forward declaration of the k-mer type.
 template <uint16_t k> class Kmer;
+
+
+}
 
 
 namespace cuttlefish

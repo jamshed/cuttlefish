@@ -9,6 +9,10 @@
 #include "spdlog/sinks/basic_file_sink.h"
 
 
+namespace cuttlefish
+{
+
+
 // Define the static fields required with `spdlog` thread pools.
 template <uint16_t k> constexpr size_t CdBG<k>::ASYNC_LOG_QUEUE_SZ;
 template <uint16_t k> constexpr uint16_t CdBG<k>::ASYNC_LOG_N_THREADS;
@@ -912,3 +916,6 @@ void CdBG<k>::remove_temp_files(const uint64_t file_id) const
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, CdBG)
+
+
+}

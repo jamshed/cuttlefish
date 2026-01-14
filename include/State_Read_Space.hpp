@@ -10,6 +10,10 @@
 #include <cstdint>
 
 
+namespace cuttlefish
+{
+
+
 template <uint8_t BITS_PER_KEY> class Kmer_Hash_Entry_API;
 
 
@@ -178,6 +182,9 @@ inline cuttlefish::state_code_t State_Read_Space::mark_outputted(const cuttlefis
     state.mark_outputted();
 
     return state.get_state();
+}
+
+
 }
 
 

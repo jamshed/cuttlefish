@@ -13,6 +13,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k, uint8_t BITS_PER_KEY> class Kmer_Hash_Table;
 template <uint8_t BITS_PER_KEY> class Kmer_Hash_Entry_API;
 
@@ -146,6 +150,9 @@ inline bool State::is_dead_end() const
 inline bool State::operator==(const State& rhs) const
 {
     return code == rhs.code;
+}
+
+
 }
 
 

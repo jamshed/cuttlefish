@@ -15,6 +15,10 @@
 #include <cassert>
 
 
+namespace cuttlefish
+{
+
+
 // =============================================================================
 // A class to iterate over the minimizers of the constituent `k`-mers of a given
 // sequence of type `T_seq_`, computing the minimizer for each `k`-mer in
@@ -375,6 +379,9 @@ inline void Min_Iterator<k>::advance(const char ch)
         pivot--;
     else
         reset_windows();
+}
+
+
 }
 
 

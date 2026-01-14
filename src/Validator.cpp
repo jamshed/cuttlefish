@@ -5,6 +5,10 @@
 #include <thread>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 Validator<k>::Validator(const Validation_Params& params, logger_t console):
     params(params), console(console)
@@ -89,3 +93,6 @@ size_t Validator<k>::search_valid_kmer(const char* const seq, const size_t seq_l
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, Validator)
+
+
+}

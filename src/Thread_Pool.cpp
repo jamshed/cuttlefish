@@ -8,6 +8,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 Thread_Pool<k>::Thread_Pool(const uint16_t thread_count, void* const dBG, const Task_Type task_type):
     thread_count(thread_count),
@@ -230,3 +234,6 @@ void Thread_Pool<k>::close()
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, Thread_Pool)
+
+
+}

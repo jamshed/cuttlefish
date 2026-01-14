@@ -16,6 +16,10 @@
 #include <string>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 class Validator
 {
@@ -130,6 +134,9 @@ public:
     // coverage of the reference by those unitigs. Returns `true` iff the validation succeeds.
     bool validate();
 };
+
+
+}
 
 
 

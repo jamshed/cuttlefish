@@ -10,6 +10,10 @@
 #include <cmath>
 
 
+namespace cuttlefish
+{
+
+
 // A collection of locks, of type `T_Lock`.
 // Intended to be used when a set of sparsely distributed locks over some index range is required.
 template <typename T_Lock>
@@ -95,6 +99,9 @@ inline void Sparse_Lock<T_Lock>::unlock_if_different(const std::size_t prev_idx,
 {
     if(lock_id(curr_idx) != lock_id(prev_idx))
         lock_[lock_id(curr_idx)].unlock();
+}
+
+
 }
 
 

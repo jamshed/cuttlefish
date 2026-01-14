@@ -6,6 +6,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 const std::vector<std::string> Seq_Input::empty_collection;
 
 
@@ -82,4 +86,7 @@ const std::vector<std::string> Seq_Input::seqs() const
 bool Seq_Input::empty() const
 {
     return seq_paths_.empty() && list_paths_.empty() && dir_paths_.empty();
+}
+
+
 }

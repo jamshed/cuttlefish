@@ -12,6 +12,10 @@
 #include <thread>
 
 
+namespace cuttlefish
+{
+
+
 class Validation_Params
 {
 private:
@@ -122,6 +126,9 @@ inline bool Validation_Params::is_valid() const
 
 
     return true;
+}
+
+
 }
 
 

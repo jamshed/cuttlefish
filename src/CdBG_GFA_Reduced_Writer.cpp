@@ -5,6 +5,10 @@
 #include "fmt/format.h"
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k>
 void CdBG<k>::write_segment(const uint16_t thread_id, const char* const seq, const uint64_t segment_name, const size_t start_kmer_idx, const size_t end_kmer_idx, const cuttlefish::dir_t dir)
 {
@@ -128,3 +132,6 @@ void CdBG<k>::write_sequence_tiling(Job_Queue<std::string, Oriented_Unitig>& job
 
 // Template instantiations for the required instances.
 ENUMERATE(INSTANCE_COUNT, INSTANTIATE, CdBG)
+
+
+}

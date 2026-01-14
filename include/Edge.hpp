@@ -11,6 +11,10 @@
 #include <cstdint>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k, uint8_t BITS_PER_KEY> class Kmer_Hash_Table;
 
 
@@ -84,6 +88,9 @@ template <uint16_t k>
 inline bool Edge<k>::is_loop() const
 {
     return u_.canonical() == v_.canonical();
+}
+
+
 }
 
 

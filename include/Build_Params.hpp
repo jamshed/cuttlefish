@@ -16,6 +16,10 @@
 #include <optional>
 
 
+namespace cuttlefish
+{
+
+
 class Build_Params
 {
 private:
@@ -33,7 +37,7 @@ private:
     const bool idx_;    // Whether to construct a k-mer index of the de Bruijn graph.
     const uint16_t min_len_;    // Length of the l-minimizers used in the k-mer index.
     const std::string output_file_path_;    // Path to the output file.
-    const std::optional<cuttlefish::Output_Format> output_format_;  // Output format (0: FASTA, 1: GFAv1, 2: GFAv2, 3: GFA-reduced).
+    const std::optional<Output_Format> output_format_;  // Output format (0: FASTA, 1: GFAv1, 2: GFAv2, 3: GFA-reduced).
     const bool track_short_seqs_;   // Whether to track input sequences shorter than `k` bases.
     const bool poly_n_stretch_; // Whether to include tiles in GFA-reduced output that track the polyN stretches in the input.
     const std::string working_dir_path_;    // Path to the working directory (for temporary files).
@@ -61,7 +65,7 @@ public:
                     const bool idx,
                     const uint16_t l,
                     const std::string& output_file_path,
-                    std::optional<cuttlefish::Output_Format> output_format,
+                    std::optional<Output_Format> output_format,
                     bool track_short_seqs,
                     bool poly_n_stretch,
                     const std::string& working_dir_path,
@@ -84,7 +88,7 @@ public:
     auto color() const { return color_; }
 
     // Returns the frequency cutoff for the (k + 1)-mers (for short-reads set input).
-    auto cutoff() const { return cutoff_.value_or(is_read_graph() ? cuttlefish::_default::CUTOFF_FREQ_READS : cuttlefish::_default::CUTOFF_FREQ_REFS); }
+    auto cutoff() const { return cutoff_.value_or(is_read_graph() ? _default::CUTOFF_FREQ_READS : _default::CUTOFF_FREQ_REFS); }
 
     // Returns the number of vertex-partitions in the discontinuity graph.
     auto vertex_part_count() const { return vertex_part_count_; }
@@ -111,7 +115,7 @@ public:
     auto output_file_path() const { return output_file_path_ + output_file_ext(); }
 
     // Returns the output format.
-    auto output_format() const { return output_format_.value_or(cuttlefish::_default::OP_FORMAT); }
+    auto output_format() const { return output_format_.value_or(_default::OP_FORMAT); }
 
     // Returns whether to track input sequences shorter than `k` bases.
     auto track_short_seqs() const { return track_short_seqs_; }
@@ -120,10 +124,10 @@ public:
     auto poly_n_stretch() const { return poly_n_stretch_; }
 
     // Returns the path to the output segment-file for the GFA-reduced format.
-    auto segment_file_path() const { return output_file_path_ + cuttlefish::file_ext::seg_ext; }
+    auto segment_file_path() const { return output_file_path_ + file_ext::seg_ext; }
 
     // Returns the path to the output sequence-file for the GFA-reduced format.
-    auto sequence_file_path() const { return output_file_path_ + cuttlefish::file_ext::seq_ext; }
+    auto sequence_file_path() const { return output_file_path_ + file_ext::seq_ext; }
 
     // Returns the working directory (for temporary files).
     auto working_dir_path() const { return working_dir_path_; }
@@ -132,11 +136,14 @@ public:
     auto path_cover() const { return path_cover_; }
 
     // Returns the path to the optional file storing meta-information about the graph and cuttlefish executions.
-    auto json_file_path() const { return output_file_path_ + cuttlefish::file_ext::json_ext; }
+    auto json_file_path() const { return output_file_path_ + file_ext::json_ext; }
 
     // Returns `true` iff the parameters selections are valid.
     bool is_valid() const;
 };
+
+
+}
 
 
 

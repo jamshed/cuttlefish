@@ -7,6 +7,10 @@
 #include <iostream>
 
 
+namespace cuttlefish
+{
+
+
 State::State(): code(0b00000)
 {}
 
@@ -476,4 +480,7 @@ std::ostream& operator<<(std::ostream& out, const State& state)
     out << (uint16_t)state.code;
 
     return out;
+}
+
+
 }

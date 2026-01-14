@@ -11,6 +11,10 @@
 #include <cstdint>
 
 
+namespace cuttlefish
+{
+
+
 template <uint16_t k, uint8_t BITS_PER_KEY> class Kmer_Hash_Table;
 
 
@@ -132,6 +136,9 @@ public:
         return state_;
     }
 };
+
+
+}
 
 
 

@@ -8,6 +8,10 @@
 #include <vector>
 
 
+namespace cuttlefish
+{
+
+
 class Build_Params;
 
 
@@ -68,6 +72,9 @@ public:
     // reduce by Cuttlefish.
     const std::string unitig_coord_buckets_path() const;
 };
+
+
+}
 
 
 

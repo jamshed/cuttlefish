@@ -14,7 +14,11 @@
 #include <cassert>
 #include <chrono>
 
-// TODO: wrap everything here in some namespaces.
+
+namespace cuttlefish
+{
+
+
 // =============================================================================
 
 // Returns a random string of length `len`, using characters from `alphabet`.
@@ -367,6 +371,9 @@ namespace timer
 namespace type
 {
     template <typename T_> inline T_& mut_ref(const T_& v) { return const_cast<T_&>(v); }
+}
+
+
 }
 
 
