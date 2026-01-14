@@ -81,7 +81,7 @@ private:
     std::atomic<int64_t> max_read_source_id{1};
 
     const uint16_t l_;  // Size of minimizers for the super k-mers.
-    const std::size_t sup_km1_mer_len_th;   // Length threshold of super (k - 1)-mers.
+    const std::size_t sup_kmer_len_th;  // Length threshold of super k-mers.
 
     const std::size_t chunk_pool_sz;    // Maximum number of chunks in the chunk memory pool.
     chunk_pool_t chunk_pool;    // Memory pool for chunks of sequences.
@@ -102,7 +102,7 @@ private:
 
         uint64_t weak_super_kmer_count = 0; // Number of weak super k-mers in the sequences.
         uint64_t weak_super_kmers_len = 0;  // Total length of the weak super k-mers in the sequences.
-        uint64_t super_km1_mers_len = 0;    // Total length of the super (k - 1)-mers in the sequences.
+        uint64_t super_kmers_len = 0;   // Total length of the super k-mers in the sequences.
 
         double parse_time = 0;  // Total time taken in parsing read chunks.
         double process_time = 0;    // Total time taken in processing parsed records.

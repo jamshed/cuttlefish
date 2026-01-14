@@ -6,6 +6,7 @@
 #include "Spin_Lock.hpp"
 #include "globals.hpp"
 #include "utility.hpp"
+#include "kache-hash/Streaming_Kmer_Hash_Table.hpp"
 #include "RabbitFX/io/Reference.h"
 #include "RabbitFX/io/Formater.h"
 #include "RabbitFX/io/Globals.h"
@@ -27,7 +28,7 @@ Graph_Partitioner<k, Is_FASTQ_, Colored_>::Graph_Partitioner(Subgraphs_Manager<k
       subgraphs(subgraphs)
     //, seqs(logistics.input_paths_collection())
     , l_(l)
-    , sup_km1_mer_len_th(2 * (k - 1) - l_)
+    , sup_kmer_len_th(2 * k - l_)
     , chunk_pool_sz(parlay::num_workers() * (Is_FASTQ_ ? 2 : 4))    // TODO: make a more informed choice.
     , chunk_pool(chunk_pool_sz)
     , chunk_q(chunk_pool_sz)
@@ -192,9 +193,9 @@ void Graph_Partitioner<k, Is_FASTQ_, Colored_>::partition()
     std::cerr << "Number of processed chunks: " << stat.chunk_count << ".\n";
     std::cerr << "Total size of chunks: " << stat.chunk_bytes << ".\n";
     std::cerr << "Number of records: " << stat.record_count << ".\n";
-    std::cerr << "Number of super (k - 1)-mers: " << stat.weak_super_kmer_count << ".\n";
+    std::cerr << "Number of super k-mers: " << stat.weak_super_kmer_count << ".\n";
     std::cerr << "Total length of the weak super k-mers:  " << stat.weak_super_kmers_len << ".\n";
-    std::cerr << "Total length of the super (k - 1)-mers: " << stat.super_km1_mers_len << ".\n";
+    std::cerr << "Total length of the super k-mers: " << stat.super_kmers_len << ".\n";
     std::cerr << "Total work in parse: " << stat.parse_time << "s.\n";
     std::cerr << "Total work in processing records: " << stat.process_time << "s.\n";
     std::cerr << "Max work in processing records: " <<
@@ -425,13 +426,11 @@ uint64_t Graph_Partitioner<k, Is_FASTQ_, Colored_>::process_chunk(chunk_t* chunk
 {
     auto& w_stat = stat_w[parlay::worker_id()].unwrap();
 
-    uint64_t sup_km1_mer_count = 0; // Number of parsed super (k - 1)-mers.
-    std::size_t sup_km1_mers_len = 0;   // Total length of the super (k - 1)-mers, in bases.
-    std::size_t weak_sup_kmers_len = 0; // Total length of the (weak) super k-mers, in bases.
+    uint64_t sup_kmer_count = 0;    // Number of parsed super k-mers.
+    std::size_t sup_kmers_len = 0;  // Total length of the super k-mers, in bases.
     uint64_t chunk_bytes = 0;   // Count of bytes in the chunk.
 
-    // Minimizer_Iterator<const char*, k - 1, true> min_it(l_, min_seed);   // `l`-minimizer iterator for `(k - 1)`-mers.
-    Min_Iterator<k - 1> min_it(l_); // `l`-minimizer iterator for `(k - 1)`-mers.
+    kache_hash::Kmer_Window<k, 17> w;   // Window to compute `l`-minimizers and rolling hashes of `k`-mers. TODO: fix minimizer len.
 
     const auto t_0 = timer::now();
     auto& parsed_chunk = parsed_chunk_w[parlay::worker_id()].unwrap();
@@ -501,73 +500,43 @@ uint64_t Graph_Partitioner<k, Is_FASTQ_, Colored_>::process_chunk(chunk_t* chunk
             }
 
 
-            // minimizer_t cur_min;    // Minimizer of the current super (k - 1)-mer in the iteration.
-            // minimizer_t next_min;   // Minimizer of the next super (k - 1)-mer in the iteration.
-            uint64_t cur_h; // 64-bit hash of the current super (k - 1)-mer's minimizer.
-            uint64_t next_h;    // 64-bit hash of the next super (k - 1)-mer's minimizer.
-            std::size_t prev_g; // Subgraph ID of the previous super (k - 1)-mer's minimizer.
-            std::size_t cur_g;  // Subgraph ID of the current super (k - 1)-mer's minimizer.
-            std::size_t next_g; // Subgraph ID of the next super (k - 1)-mer's minimizer.
-            // std::size_t cur_min_off, next_min_off;  // Relative offsets of the minimizers in the fragment. Used for assertion checks.
-            std::size_t cur_sup_km1_mer_off = 0;    // Relative offset of the current super (k - 1)-mer in the fragment.
-            std::size_t km1_mer_idx = 0;    // Index of the current (k - 1)-mer in the current super (k - 1)-mer.
-            frag_len = k - 1;
+            uint64_t cur_h; // 64-bit hash of the current super k-mer's minimizer.
+            uint64_t next_h;    // 64-bit hash of the next super k-mer's minimizer.
+            std::size_t cur_g;  // Subgraph ID of the current super k-mer's minimizer.
+            std::size_t next_g; // Subgraph ID of the next super k-mer's minimizer.
+            std::size_t cur_sup_kmer_off = 0;   // Relative offset of the current super k-mer in the fragment.
+            std::size_t kmer_idx = 0;   // Index of the current k-mer in the current super k-mer.
+            frag_len = k;
 
-            // min_it.reset(frag, seq_len - frag_beg); // The fragment length is an estimate; upper-bound to be exact.
-            // min_it.value_at(cur_min, cur_min_off, cur_h);
-            min_it.reset(frag);
-            cur_h = min_it.hash();
+            w.init(frag);
+            cur_h = w.minimizer_hash();
             cur_g = subgraphs.graph_ID(cur_h);
-            prev_g = subgraphs.graph_count();   // To deal with false-positive `-Wmaybe-uninitialized` later on.
 
             while(DNA_Utility::is_DNA_base(frag[frag_len]))
             {
-                const auto len = km1_mer_idx + (k - 1); // Length of the current super (k - 1)-mer.
+                const auto len = kmer_idx + k;  // Length of the current super k-mer.
 
-                min_it.advance(frag[frag_len]);
-                km1_mer_idx++, frag_len++;
+                w.advance(frag[frag_len]);
+                kmer_idx++, frag_len++;
 
-                // min_it.value_at(next_min, next_min_off, next_h);
-                next_h = min_it.hash();
+                next_h = w.minimizer_hash();
                 next_g = subgraphs.graph_ID(next_h);
-/*                  assert(next_min_off >= cur_sup_km1_mer_off + km1_mer_idx);
 
-                if(next_min_off != cur_min_off)
-                    // Either the last minimizer just fell out of the (k - 1)-mer window or the new minimizer sits at the last l-mer.
-                    assert( cur_min_off == cur_sup_km1_mer_off + km1_mer_idx - 1 ||
-                            next_min_off == cur_sup_km1_mer_off + km1_mer_idx + (k - 1) - l_);
-*/
-                // Either encountered a discontinuity vertex—the k-mer whose suffix is the current (k - 1)-mer, or the super (k - 1)-mer extends too long.
-                if(next_g != cur_g || len == sup_km1_mer_len_th)
+                if(next_h != cur_h || len > sup_kmer_len_th)
                 {
-                    if(next_g != cur_g)
-                        // The `(k - 1)`-mers of this discontinuity k-mer have minimizers mapping to different subgraphs.
-                        assert(subgraphs.G().is_discontinuity(frag + cur_sup_km1_mer_off + km1_mer_idx - 1));
+                    const auto next_sup_kmer_off = cur_sup_kmer_off + kmer_idx;
+                    sup_kmers_len += len - 1;
+                    sup_kmer_count++;
 
-                    const auto next_sup_km1_mer_off = cur_sup_km1_mer_off + km1_mer_idx;
-                    assert(next_sup_km1_mer_off == frag_len - (k - 1));
-                    sup_km1_mers_len += len;
-                    sup_km1_mer_count++;
-
-                    const bool l_joined = (cur_sup_km1_mer_off > 0);    // Whether this weak super k-mer is joined to the one to its left.
-                    const bool r_joined = true; // Whether this weak super k-mer is joined to the one to its right.
-                    const bool l_disc = (l_joined && prev_g != cur_g);  // Whether it's left-discontinuous.
-                    const bool r_disc = (next_g != cur_g);  // Whether it's right-discontinuous.
-                    // const bool l_cont = (l_joined && prev_g == cur_g);  // Whether it's left-continuous.
-                    // const bool r_cont = (next_g == cur_g);  // Whether it's right-continuous.
-                    const auto len_weak = l_joined + len + r_joined;    // Length of the weak super k-mer.
-                    assert(len_weak >= k);
                     // TODO: the following add, being to different subgraphs' different worker-buffers, causes lots of cache misses.
                     if constexpr(!Colored_)
-                        subgraphs.add_super_kmer(cur_g, frag + cur_sup_km1_mer_off - l_joined, len_weak, l_disc, r_disc);
+                        subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len - 1, false, false);
                     else
-                        subgraphs.add_super_kmer(cur_g, frag + cur_sup_km1_mer_off - l_joined, len_weak, source_id, l_disc, r_disc);
-                    weak_sup_kmers_len += len_weak;
+                        subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len - 1, source_id, false, false);
 
-                    cur_sup_km1_mer_off = next_sup_km1_mer_off;
-                    prev_g = cur_g;
+                    cur_sup_kmer_off = next_sup_kmer_off;
                     cur_g = next_g;
-                    km1_mer_idx = 0;
+                    kmer_idx = 0;
                 }
 
                 // cur_min = next_min;
@@ -575,24 +544,15 @@ uint64_t Graph_Partitioner<k, Is_FASTQ_, Colored_>::process_chunk(chunk_t* chunk
                 cur_h = next_h;
             }
 
-            const auto len = frag_len - cur_sup_km1_mer_off;
-            sup_km1_mers_len += len;
-            sup_km1_mer_count++;
+            const auto len = frag_len - cur_sup_kmer_off;
+            sup_kmers_len += len;
+            sup_kmer_count++;
 
-            const bool l_joined = (cur_sup_km1_mer_off > 0);
-            const bool r_joined = false;
-            const bool l_disc = (l_joined && prev_g != cur_g);
-            const bool r_disc = false;
-            // const bool l_cont = (l_joined && prev_g == cur_g);
-            // const bool r_cont = false;
-            const auto len_weak = l_joined + len + r_joined;
-            assert(len_weak >= k);
             // TODO: the following add, being to different subgraphs' different worker-buffers, causes lots of cache misses.
             if constexpr(!Colored_)
-                subgraphs.add_super_kmer(cur_g, frag + cur_sup_km1_mer_off - l_joined, len_weak, l_disc, r_disc);
+                subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len, false, false);
             else
-                subgraphs.add_super_kmer(cur_g, frag + cur_sup_km1_mer_off - l_joined, len_weak, source_id, l_disc, r_disc);
-            weak_sup_kmers_len += len_weak;
+                subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len, source_id, false, false);
 
             last_frag_end = frag_beg + frag_len;
         }
@@ -606,9 +566,8 @@ uint64_t Graph_Partitioner<k, Is_FASTQ_, Colored_>::process_chunk(chunk_t* chunk
 
     w_stat.chunk_count++;
     w_stat.chunk_bytes += chunk_bytes;
-    w_stat.weak_super_kmer_count += sup_km1_mer_count;
-    w_stat.weak_super_kmers_len += weak_sup_kmers_len;
-    w_stat.super_km1_mers_len += sup_km1_mers_len;
+    w_stat.weak_super_kmer_count += sup_kmer_count;
+    w_stat.super_kmers_len += sup_kmers_len;
 
     return chunk_bytes;
 }
@@ -622,7 +581,7 @@ void Graph_Partitioner<k, Is_FASTQ_, Colored_>::Worker_Stats::operator+=(const W
     record_count += rhs.record_count;
     weak_super_kmer_count += rhs.weak_super_kmer_count;
     weak_super_kmers_len += rhs.weak_super_kmers_len;
-    super_km1_mers_len += rhs.super_km1_mers_len;
+    super_kmers_len += rhs.super_kmers_len;
     parse_time += rhs.parse_time;
     process_time += rhs.process_time;
 }
