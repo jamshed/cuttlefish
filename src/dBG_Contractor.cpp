@@ -67,7 +67,7 @@ void dBG_Contractor<k>::construct()
 
     const auto t_subg = timer::now();
     std::cerr << "Subgraphs construction and contraction completed. Time taken: " << timer::duration(t_subg - t_part) << " seconds.\n";
-
+/*
     std::cerr << "Edge-matrix size: " << gamma.E().size() << "\n";
     std::cerr << "Phantom edge upper-bound: " << gamma.phantom_edge_upper_bound() << "\n";
     std::cerr << "Expecting at most " << ((gamma.E().row_size(0) + gamma.phantom_edge_upper_bound()) / 2) << " more non-DCC maximal unitigs\n";
@@ -110,6 +110,7 @@ void dBG_Contractor<k>::construct()
     std::cerr << "Unitigs-collation completed. Time taken: " << timer::duration(t_uc - t_e) << " seconds.\n";
 
     force_free(P_e);
+*/
 }
 
 

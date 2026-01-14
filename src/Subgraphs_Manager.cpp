@@ -157,6 +157,7 @@ void Subgraphs_Manager<k, Colored_>::process()
         const auto t_1 = timer::now();
         if constexpr(!Colored_)
             b.remove();
+/*
         const auto t_2 = timer::now();
         sub_dBG.contract();
         const auto t_3 = timer::now();
@@ -166,6 +167,7 @@ void Subgraphs_Manager<k, Colored_>::process()
         if constexpr(Colored_)
             b.remove();
         const auto t_5 = timer::now();
+*/
 
         auto& max_kmer_c = max_kmer_count[parlay::worker_id()].unwrap();
         auto& min_kmer_c = min_kmer_count[parlay::worker_id()].unwrap();
@@ -216,9 +218,9 @@ void Subgraphs_Manager<k, Colored_>::process()
             std::cerr << "\rSolved " << solved << " subgraphs.";
 
         t_construction[parlay::worker_id()].unwrap() += timer::duration(t_1 - t_0);
-        t_bucket_rm[parlay::worker_id()].unwrap() += timer::duration(t_2 - t_1) + timer::duration(t_5 - t_4);
-        t_contraction[parlay::worker_id()].unwrap()  += timer::duration(t_3 - t_2);
-        t_color_extract[parlay::worker_id()].unwrap() += timer::duration(t_4 - t_3);
+        // t_bucket_rm[parlay::worker_id()].unwrap() += timer::duration(t_2 - t_1) + timer::duration(t_5 - t_4);
+        // t_contraction[parlay::worker_id()].unwrap()  += timer::duration(t_3 - t_2);
+        // t_color_extract[parlay::worker_id()].unwrap() += timer::duration(t_4 - t_3);
     };
 
 
