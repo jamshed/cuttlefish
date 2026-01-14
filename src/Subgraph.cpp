@@ -489,9 +489,9 @@ template <uint16_t k, bool Colored_>
 Subgraphs_Scratch_Space<k, Colored_>::Subgraphs_Scratch_Space(const std::size_t max_sz, const std::string& color_rel_bucket_pref):
       in_process_arr_(parlay::num_workers())
 {
-    map_.reserve(parlay::num_workers());
+    map_ = new Padded<map_t*>[parlay::num_workers()];
     for(std::size_t i = 0; i < parlay::num_workers(); ++i)
-        HT_Router<k, Colored_>::add_HT(map_, max_sz);
+        map_[i] = new map_t();
 
     if constexpr(Colored_)
     {
@@ -521,8 +521,7 @@ Subgraphs_Scratch_Space<k, Colored_>::Subgraphs_Scratch_Space(const std::size_t 
 template <uint16_t k, bool Colored_>
 auto Subgraphs_Scratch_Space<k, Colored_>::map() -> map_t&
 {
-    assert(map_.size() == parlay::num_workers());
-    return map_[parlay::worker_id()].unwrap();
+    return *(map_[parlay::worker_id()].unwrap());
 }
 
 

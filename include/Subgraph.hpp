@@ -112,7 +112,7 @@ public:
 
 private:
 
-    std::vector<Padded<map_t>> map_;   // Map collection for different workers.
+    Padded<map_t*>* map_;   // Map collection for different workers.
     // TODO: try thread-local allocation for map-space, e.g. from parlay.
 
     Color_Table M_c;    // Hashtable for color-sets.
