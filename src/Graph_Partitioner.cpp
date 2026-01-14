@@ -530,9 +530,7 @@ uint64_t Graph_Partitioner<k, Is_FASTQ_, Colored_>::process_chunk(chunk_t* chunk
 
                     // TODO: the following add, being to different subgraphs' different worker-buffers, causes lots of cache misses.
                     if constexpr(!Colored_)
-                        subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len - 1, false, false);
-                    else
-                        subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len - 1, source_id, false, false);
+                        subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len - 1, w.hash_fwd(), w.hash_rev(), w.minimizer_hash());
 
                     cur_sup_kmer_off = next_sup_kmer_off;
                     cur_g = next_g;
@@ -550,9 +548,7 @@ uint64_t Graph_Partitioner<k, Is_FASTQ_, Colored_>::process_chunk(chunk_t* chunk
 
             // TODO: the following add, being to different subgraphs' different worker-buffers, causes lots of cache misses.
             if constexpr(!Colored_)
-                subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len, false, false);
-            else
-                subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len, source_id, false, false);
+                subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len, w.hash_fwd(), w.hash_rev(), w.minimizer_hash());
 
             last_frag_end = frag_beg + frag_len;
         }

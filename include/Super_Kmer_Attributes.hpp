@@ -26,38 +26,38 @@ class Super_Kmer_Attributes<false>
 {
 private:
 
-    uint16_t bit_pack;  // Packed attribute collection of a super k-mer.
+    uint8_t len_;   // Length of the super k-mer.
     uint16_t g_id_; // Graph ID of the super k-mer.
 
-    static constexpr uint32_t len_pos = 0;  // Bit-index of length in the pack.
-    static constexpr uint32_t l_disc_pos = 8;   // Bit-index of the left discontinuity marker.
-    static constexpr uint32_t r_disc_pos  = 9;  // Bit-index of the right discontinuity marker.
-    static constexpr uint16_t len_mask = 0b1111'1111 << len_pos;
-    static constexpr uint16_t l_disc_mask = (0b1 << l_disc_pos);
-    static constexpr uint16_t r_disc_mask = (0b1 << r_disc_pos);
-
+    uint64_t h_f;   // Hash of the first k-mer in the forward-strand form.
+    uint64_t h_r;   // Hash of the first k-mer in the reverse-strand form.
+    uint64_t min;   // Minimizer-hash of the super k-mer.
 
 public:
 
     // Constructs an empty attribute object.
     Super_Kmer_Attributes() {}
 
-    // Constructs an attribute object with length (in bases) `len` and left /
-    // right discontinuity markers `l_disc` and `r_disc`. The associated super
-    // k-mer is to reside in the `g_id`'th subgraph.
-    Super_Kmer_Attributes(std::size_t len, bool l_disc, bool r_disc, uint16_t g_id);
+    // Constructs an attribute object with length (in bases) `len`.  The first
+    // k-mer in the super k-mer has forward-hash `h_f` and reverse-hash h_b`,
+    // and the super k-mer's minimizer-hash is `min`. The associated super k-mer
+    // is to reside in the `g_id`'th subgraph.
+    Super_Kmer_Attributes(std::size_t len, uint16_t g_id, uint64_t h_f, uint64_t h_r, uint64_t min);
 
     // Returns the length of the super k-mer (in bases).
-    uint8_t len() const { return (bit_pack & len_mask) >> len_pos; }
-
-    // Returns whether the super k-mer is discontinuous on the left.
-    bool left_discontinuous() const { return bit_pack & l_disc_mask; }
-
-    // Returns whether the super k-mer is discontinuous on the right.
-    bool right_discontinuous() const { return bit_pack & r_disc_mask; }
+    uint8_t len() const { return len_; }
 
     // Returns the graph ID of the super k-mer.
     uint16_t g_id() const { return g_id_; }
+
+    // Returns the hash of the first k-mer in the forward-strand form.
+    auto hash_fwd() const { return h_f; }
+
+    // Returns the hash of the first k-mer in the reverse-strand form.
+    auto hash_rev() const { return h_r; }
+
+    // Returns the minimizer-hash of the super k-mer.
+    auto min_hash() const { return min; }
 };
 
 
@@ -105,12 +105,13 @@ public:
 };
 
 
-inline Super_Kmer_Attributes<false>::Super_Kmer_Attributes(const std::size_t len, const bool l_disc, const bool r_disc, const uint16_t g_id):
-    bit_pack((len << len_pos) | (static_cast<uint16_t>(l_disc) << l_disc_pos) | (static_cast<uint16_t>(r_disc) << r_disc_pos))
+inline Super_Kmer_Attributes<false>::Super_Kmer_Attributes(std::size_t len, uint16_t g_id, uint64_t h_f, uint64_t h_r, uint64_t min):
+      len_(len)
     , g_id_(g_id)
-{
-    assert(len <= (len_mask >> len_pos));
-}
+    , h_f(h_f)
+    , h_r(h_r)
+    , min(min)
+{}
 
 
 inline Super_Kmer_Attributes<true>::Super_Kmer_Attributes(const std::size_t len, const uint32_t source, const bool l_disc, const bool r_disc, const uint16_t g_id):

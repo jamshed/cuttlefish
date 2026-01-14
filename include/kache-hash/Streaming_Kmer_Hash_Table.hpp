@@ -364,6 +364,12 @@ public:
 
     // Returns the minimizer-hash.
     auto minimizer_hash() const { return min_it.hash(); }
+
+    // Returns the hash of the current k-mer in the forward-strand.
+    auto hash_fwd() const { return rh.hash_fwd(); }
+
+    // Returns the hash of the current k-mer in the reverse-strand.
+    auto hash_rev() const { return rh.hash_rev(); }
 };
 
 

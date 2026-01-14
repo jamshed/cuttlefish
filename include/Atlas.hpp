@@ -103,16 +103,10 @@ public:
     auto bytes() const { return size() * rec_size; }
 
     // Adds a super k-mer to the atlas with label `seq` and length `len`. The
-    // markers `l_disc` and `r_disc` denote whether the left and the right ends
-    // of the (weak) super k-mer are discontinuous or not. The associated super
+    // first k-mer in the super k-mer has forward-hash `h_f` and reverse-hash
+    // h_b`, and the super k-mer's minimizer-hash is `min`. The associated super
     // k-mer is to reside in the `g_id`'th subgraph.
-    void add(const char* seq, std::size_t len, bool l_disc, bool r_disc, uint16_t g_id);
-
-    // Adds a super k-mer to the atlas with label `seq` and length `len` from
-    // source-ID `source`. The markers `l_disc` and `r_disc` denote whether the
-    // left and the right ends of the (weak) super k-mer are discontinuous or
-    // not. The associated super k-mer is to reside in the `g_id`'th subgraph.
-    void add(const char* seq, std::size_t len, source_id_t source, bool l_disc, bool r_disc, uint16_t g_id);
+    void add(const char* seq, std::size_t len, uint16_t g_id, uint64_t h_f, uint64_t h_r, uint64_t min);
 
     // Collates the worker-local super k-mers in the bucket per their source-ID
     // and flushes them to the subgraphs in the atlas. The source-IDs are
@@ -136,25 +130,14 @@ public:
 
 
 template <>
-inline void Atlas<false>::add(const char* const seq, const std::size_t len, const bool l_disc, const bool r_disc, const uint16_t g_id)
+inline void Atlas<false>::add(const char* seq, const std::size_t len, const uint16_t g_id, const uint64_t h_f, const uint64_t h_r, const uint64_t min)
 {
     const auto w_id = parlay::worker_id();
     auto& c_w = chunk_w[w_id].unwrap(); // Worker-specific chunk.
 
-    c_w.add(seq, len, l_disc, r_disc, g_id);
+    c_w.add(seq, len, g_id, h_f, h_r, min);
     if(c_w.full())
         empty_w_local_chunk(w_id);
-}
-
-
-template <>
-inline void Atlas<true>::add(const char* const seq, const std::size_t len, const source_id_t source, const bool l_disc, const bool r_disc, const uint16_t g_id)
-{
-    const auto w_id = parlay::worker_id();
-    auto& c_w = chunk_w[w_id].unwrap(); // Worker-specific chunk.
-
-    c_w.add(seq, len, source, l_disc, r_disc, g_id);
-    // No flush until collation / flush is invoked explicitly from outside.
 }
 
 }

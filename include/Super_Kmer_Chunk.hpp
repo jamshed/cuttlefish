@@ -141,10 +141,10 @@ public:
     void fetch_end() const;
 
     // Adds a super k-mer to the chunk with label `seq` and length `len`. The
-    // markers `l_disc` and `r_disc` denote whether the left and the right ends
-    // of the (weak) super k-mer are discontinuous or not. The associated super
+    // first k-mer in the super k-mer has forward-hash `h_f` and reverse-hash
+    // h_b`, and the super k-mer's minimizer-hash is `min`. The associated super
     // k-mer is to reside in the `g_id`'th subgraph.
-    void add(const char* seq, std::size_t len, bool l_disc, bool r_disc, uint16_t g_id);
+    void add(const char* seq, std::size_t len, uint16_t g_id, uint64_t h_f, uint64_t h_r, uint64_t min);
 
     // Adds a super k-mer to the chunk with label `seq` and length `len` from
     // source-ID `source`. The markers `l_disc` and `r_disc` denote whether the
@@ -353,12 +353,12 @@ inline void Super_Kmer_Chunk<Colored_>::deserialize_decompressed(std::ifstream& 
 
 
 template <>
-inline void Super_Kmer_Chunk<false>::add(const char* const seq, const std::size_t len, const bool l_disc, const bool r_disc, const uint16_t g_id)
+inline void Super_Kmer_Chunk<false>::add(const char* seq, std::size_t len, uint16_t g_id, uint64_t h_f, uint64_t h_r, uint64_t min)
 {
     assert(len <= max_sup_kmer_len);
     assert(size() < cap_);
 
-    att_buf[size()] = Super_Kmer_Attributes<false>(len, l_disc, r_disc, g_id);
+    att_buf[size()] = Super_Kmer_Attributes<false>(len, g_id, h_f, h_r, min);
     add_encoded_label(seq, len);
     size_++;
 }

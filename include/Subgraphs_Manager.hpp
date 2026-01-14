@@ -85,12 +85,12 @@ public:
     // Returns the discontinuity graph.
     const auto& G() const { return G_; }
 
-    // Adds a (weak) super k-mer to the subgraph `g` of the de Bruijn graph
-    // with label `seq` and length `len`. The markers `l_disc` and `r_disc`
-    // denote whether the left and the right ends of the (weak) super k-mer are
-    // discontinuous or not.
+    // Adds a super k-mer to the subgraph `g` of the de Bruijn graph with label
+    // `seq` and length `len`. The first k-mer in the super k-mer has forward-
+    // hash `h_f` and reverse-hash `h_b`, and the super k-mer's minimizer-hash
+    // is `min`.
     template <bool C_ = Colored_, std::enable_if_t<!C_, int> = 0>
-    void add_super_kmer(std::size_t g, const char* seq, std::size_t len, bool l_disc, bool r_disc);
+    void add_super_kmer(std::size_t g, const char* seq, std::size_t len, uint64_t h_f, uint64 h_r, uint64_t min);
 
     // Adds a (weak) super k-mer to the subgraph `g` of the de Bruijn graph
     // with label `seq` and length `len` from source-ID `source`. The markers
@@ -137,13 +137,13 @@ public:
 
 template <uint16_t k, bool Colored_>
 template <bool C_, std::enable_if_t<!C_, int>>
-inline void Subgraphs_Manager<k, Colored_>::add_super_kmer(const std::size_t g, const char* const seq, const std::size_t len, const bool l_disc, const bool r_disc)
+inline void Subgraphs_Manager<k, Colored_>::add_super_kmer(const std::size_t g, const char* const seq, const std::size_t len, const uint64_t h_f, const uint64 h_r, const uint64_t min)
 {
     assert(len >= k);
 
     const auto a = Atlas<Colored_>::atlas_ID(g);
     auto& bucket = atlas[a].unwrap();
-    bucket.add(seq, len, l_disc, r_disc, g);
+    bucket.add(seq, len, g, h_f, h_r, min);
 
     // add_to_HLL(g, seq, len);
 }
