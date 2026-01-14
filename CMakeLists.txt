@@ -131,7 +131,7 @@ endif()
 # Add the required preprocessor definitions (`#define`s) to pass on.
 add_compile_definitions(PROJECT_VERSION=${CMAKE_PROJECT_VERSION})
 add_compile_definitions(FMT_HEADER_ONLY)    # For `spdlog`.
-add_compile_definitions(CMAKE_EXPORT_COMPILE_COMMANDS)  # For better `clangd` scanning.
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)   # For better `clangd` scanning.
 # add_compile_definitions(USE_PARLAY) # For `parlayhash`.
 
 if(INSTANCE_COUNT)
