@@ -90,6 +90,9 @@ public:
     // first `k`-mer after the construction.
     void reset(const char* seq);
 
+    // Resets the iterator to the k-mer `kmer`.
+    void reset(const Kmer<k>& kmer);
+
     // Returns the minimizer's 64-bit hash value.
     uint64_t hash() const;
 
@@ -98,6 +101,9 @@ public:
     // places the position of the minimizer `l`-mer in its corresponding strand
     // at `min_coord`'s lowest 6 bits.
     uint64_t hash(uint8_t& min_coord) const;
+
+    // Moves the iterator to a next k-mer extending it with the nucleobase `b`.
+    void advance(DNA::Base b);
 
     // Moves the iterator to a next k-mer extending it with the character `ch`.
     void advance(char ch);
@@ -155,6 +161,37 @@ inline void Min_Iterator<k, l>::reset(const char* const seq)
 
         const DNA::Base b = DNA_Utility::map_base(seq[idx]);
         assert(b != DNA::N);
+        last_lmer[fwd] = ((last_lmer[fwd] & clear_MSN_mask) << 2) | b;
+        last_lmer[rev] = (last_lmer[rev] >> 2) | (as_u64(DNA_Utility::complement(b)) << (2 * (l - 1)));
+
+        pivot++;
+        H[fwd][pivot] = lmer_hash(last_lmer[fwd]);
+        H[rev][pivot] = lmer_hash(last_lmer[rev]);
+    }
+
+    reset_windows();
+}
+
+
+template <uint16_t k, uint16_t l>
+inline void Min_Iterator<k, l>::reset(const Kmer<k>& kmer)
+{
+    last_lmer[fwd] = last_lmer[rev] = 0;
+
+    for(std::size_t idx = 0; idx < l; ++idx)
+    {
+        const auto b = DNA_Utility::map_base(kmer.base_at(k - 1 - idx));
+        last_lmer[fwd] |= (as_u64(b) << (2 * (l - 1 - idx)));
+        last_lmer[rev] |= (as_u64(DNA_Utility::complement(b)) << (2 * idx));
+    }
+
+    pivot = 0;
+    H[fwd][pivot] = lmer_hash(last_lmer[fwd]);
+    H[rev][pivot] = lmer_hash(last_lmer[rev]);
+
+    for(std::size_t idx = l; idx < k; ++idx)
+    {
+        const DNA::Base b = DNA_Utility::map_base(kmer.base_at(k - 1 - idx));
         last_lmer[fwd] = ((last_lmer[fwd] & clear_MSN_mask) << 2) | b;
         last_lmer[rev] = (last_lmer[rev] >> 2) | (as_u64(DNA_Utility::complement(b)) << (2 * (l - 1)));
 
@@ -233,11 +270,8 @@ inline int16_t Min_Iterator<k, l>::hash_pos() const
 
 
 template <uint16_t k, uint16_t l>
-inline void Min_Iterator<k, l>::advance(const char ch)
+inline void Min_Iterator<k, l>::advance(const DNA::Base b)
 {
-    assert(DNA_Utility::is_DNA_base(ch));
-
-    const DNA::Base b = DNA_Utility::map_base(ch);
     assert(b != DNA::N);
     last_lmer[fwd] = ((last_lmer[fwd] & clear_MSN_mask) << 2) | b;
     last_lmer[rev] = (last_lmer[rev] >> 2) | (as_u64(DNA_Utility::complement(b)) << (2 * (l - 1)));
@@ -255,6 +289,14 @@ inline void Min_Iterator<k, l>::advance(const char ch)
         pivot++;
     else
         reset_windows();
+}
+
+
+template <uint16_t k, uint16_t l>
+inline void Min_Iterator<k, l>::advance(const char ch)
+{
+    assert(DNA_Utility::is_DNA_base(ch));
+    advance(DNA_Utility::map_base(ch));
 }
 
 
