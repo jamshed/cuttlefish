@@ -22,6 +22,7 @@
 #include "globals.hpp"
 #include "kache-hash/Streaming_Kmer_Hash_Table.hpp"
 #include "unordered_dense/unordered_dense.h"
+#include "parlay/parallel.h"
 
 #include <cstdint>
 #include <cstddef>
@@ -51,6 +52,7 @@ class Subgraphs_Scratch_Space
 public:
 
     typedef kache_hash::Streaming_Kmer_Hash_Table<k, false, uint64_t, 17> map_t;
+    typedef map_t::Token token_t;
 
     typedef std::pair<LMTig_Coord, uint64_t> in_process_t;  // Vertex's lm-tig coordinate and color-hash.
     typedef std::vector<in_process_t> in_process_arr_t;
@@ -73,6 +75,9 @@ public:
 
     // Returns the appropriate map for a worker.
     map_t& map();
+
+    // Returns the appropriate token for a worker.
+    auto& token() const { return token_[parlay::worker_id()].unwrap(); }
 
     // Returns the appropriate container of in-process vertices, their lm-tig
     // coordinates and color-hashes, for a worker.
@@ -112,7 +117,7 @@ public:
 private:
 
     Padded<map_t*>* M_;    // Map collection for different workers.
-    std::vector<Padded<typename map_t::Token>> token;   // `Token` to use each worker-specific map.
+    std::vector<Padded<typename map_t::Token>> token_;  // `Token` to use for each worker-specific map.
     // TODO: try thread-local allocation for map-space, e.g. from parlay.
 
     Color_Table M_c;    // Hashtable for color-sets.
@@ -171,6 +176,7 @@ private:
     Subgraphs_Scratch_Space<k, Colored_>& work_space;   // Collection of working space for various data structures, per worker.
 
     typename Subgraphs_Scratch_Space<k, Colored_>::map_t& M;    // Map to be used for this subgraph.
+    const typename Subgraphs_Scratch_Space<k, Colored_>::token_t& token;    // Token of the worker processing this subgraph.
 
     uint64_t kmer_count_;   // Number of k-mer instances (copies) in the graph.
 

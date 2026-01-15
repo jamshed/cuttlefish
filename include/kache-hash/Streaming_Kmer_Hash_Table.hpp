@@ -352,6 +352,15 @@ public:
         min_it.reset(s);
     }
 
+    // Initializes the k-mer window at the beginning of the super k-mer encoding
+    // `label` that has `word_count` many words and is MSB-aligned. The
+    // minimizer is not initialized and is assumed to be computed externally.
+    void init(const uint64_t* label, const std::size_t word_count)
+    {
+        v.from_super_kmer(label, word_count);
+        rh.init(v.kmer());
+    }
+
     // Advances the window by one k-mer, by the character `ch`.
     void advance(const char ch)
     {

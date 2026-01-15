@@ -21,6 +21,7 @@ Subgraph<k, Colored_>::Subgraph(const Super_Kmer_Bucket<Colored_>& B, Discontinu
       B(B)
     , work_space(space)
     , M(space.map())
+    , token(space.token())
     , kmer_count_(0)
     , edge_c(0)
     , label_sz(0)
@@ -60,19 +61,14 @@ void Subgraph<k, Colored_>::construct()
         kmer_count_ += len - (k - 1);
 
 
-        v.from_super_kmer(label, word_count);
+        kache_hash::Kmer_Window<k, 17> w;
+        w.init(label, word_count);
         std::size_t kmer_idx = 0;
         while(true)
         {
             assert(kmer_idx + k - 1 < len);
 
-            // Update hash table with the neighborhood info.
-            // ht_router::update(M, v.canonical(),
-            //                      front, back,
-            //                      kmer_idx == 0 && att.left_discontinuous() ? v.entrance_side() : side_t::unspecified,
-            //                      kmer_idx + k == len && att.right_discontinuous() ? v.exit_side() : side_t::unspecified,
-            //                      source);
-
+            M.upsert(w, [](auto& v){ return v + 1; }, 1, token);
             if(kmer_idx + k == len)
                 break;
 
@@ -465,10 +461,10 @@ Subgraphs_Scratch_Space<k, Colored_>::Subgraphs_Scratch_Space(const std::size_t 
       in_process_arr_(parlay::num_workers())
 {
     M_ = new Padded<map_t*>[parlay::num_workers()];
-    token.resize(parlay::num_workers());
+    token_.resize(parlay::num_workers());
     for(std::size_t i = 0; i < parlay::num_workers(); ++i)
         M_[i] = new map_t(),
-        token[i] = M_[i].unwrap()->register_user();
+        token_[i] = M_[i].unwrap()->register_user();
 
     if constexpr(Colored_)
     {

@@ -5,6 +5,7 @@
 
 
 #include "DNA_Utility.hpp"
+#include "Kmer.hpp"
 
 #include <cstdint>
 #include <cstddef>
@@ -66,6 +67,10 @@ public:
     // sequence `seq`.
     void init(const char* seq);
 
+    // Initializes the hasher for the `k`-mer `kmer`. The minimizer-hash is not
+    // initialized and is assumed to be computed externally.
+    void init(const Kmer<k>& kmer);
+
     // Advances the hasher in its underlying sequence by the nucleobase `ch` to
     // the right.
     void advance(char ch);
@@ -92,6 +97,21 @@ inline void Rolling_Hash<k, canonical>::init(const char* const seq)
     for(std::size_t i = 0; i < k; ++i)
     {
         base[i] = DNA_Utility::map_base(seq[i]);
+        h_f ^= rotl(s[base[i]], k - 1 - i);
+        if constexpr(canonical)
+            h_r ^= rotl(s[DNA_Utility::complement(DNA::Base(base[i]))], i);
+    }
+}
+
+
+template <uint16_t k, bool canonical>
+inline void Rolling_Hash<k, canonical>::init(const Kmer<k>& kmer)
+{
+    h_f = h_r = 0;
+    off = 0;
+    for(std::size_t i = 0; i < k; ++i)
+    {
+        base[i] = kmer.base_at(k - 1 - i);
         h_f ^= rotl(s[base[i]], k - 1 - i);
         if constexpr(canonical)
             h_r ^= rotl(s[DNA_Utility::complement(DNA::Base(base[i]))], i);
