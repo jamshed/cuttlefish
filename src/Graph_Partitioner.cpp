@@ -278,7 +278,7 @@ void Graph_Partitioner<k, Is_FASTQ_, Colored_>::read_chunks()
                             if (chunk->chunk == nullptr) {
                                 return false;
                             }
-                            // get the first RabitFX::io::core::DataChunk
+                            // get the first RabbitFX::io::core::DataChunk
                             auto* dchunk = chunk->chunk;
                             uint64_t nb = 0;
 
@@ -522,15 +522,15 @@ uint64_t Graph_Partitioner<k, Is_FASTQ_, Colored_>::process_chunk(chunk_t* chunk
                 next_h = w.minimizer_hash();
                 next_g = subgraphs.graph_ID(next_h);
 
-                if(next_h != cur_h || len > sup_kmer_len_th)
+                if(next_h != cur_h || len == sup_kmer_len_th)
                 {
                     const auto next_sup_kmer_off = cur_sup_kmer_off + kmer_idx;
-                    sup_kmers_len += len - 1;
+                    sup_kmers_len += len;
                     sup_kmer_count++;
 
                     // TODO: the following add, being to different subgraphs' different worker-buffers, causes lots of cache misses.
                     if constexpr(!Colored_)
-                        subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len - 1, w.hash_fwd(), w.hash_rev(), w.minimizer_hash());
+                        subgraphs.add_super_kmer(cur_g, frag + cur_sup_kmer_off, len, w.hash_fwd(), w.hash_rev(), w.minimizer_hash());
 
                     cur_sup_kmer_off = next_sup_kmer_off;
                     cur_g = next_g;
