@@ -51,9 +51,9 @@ void Graph_Partitioner<k, Is_FASTQ_, Colored_>::partition()
     double t_collate = 0;
 
     // Number of consumers when partitioning is done in the producer-consumer model.
-    // const auto consumer_c = (parlay::num_workers() > (reader_c - 1) ? parlay::num_workers() - (reader_c - 1) : 1);
+    const auto consumer_c = (parlay::num_workers() > (reader_c - 1) ? parlay::num_workers() - (reader_c - 1) : 1);
 
-/*
+// /*
     if constexpr(!Colored_)
     {
         std::thread reader([&](){ read_chunks(); });
@@ -66,7 +66,8 @@ void Graph_Partitioner<k, Is_FASTQ_, Colored_>::partition()
 
         reader.join();
     }
-    else if(large_src)
+/*
+    else // if(large_src)
     {
         std::thread reader([&](){ read_chunks(); });
 
@@ -117,7 +118,6 @@ void Graph_Partitioner<k, Is_FASTQ_, Colored_>::partition()
         reader.join();
     }
     else
-*/
     {
         std::vector<std::pair<std::size_t, std::size_t>> sz_src;    // Size of the sources and their IDs.
         sz_src.reserve(seqs.size());
@@ -184,6 +184,7 @@ void Graph_Partitioner<k, Is_FASTQ_, Colored_>::partition()
             }
         }, 1);
     }
+*/
 
     std::cerr << "\rPartitioned " << (bytes_consumed / (1024 * 1024)) << " MB of uncompressed data.\n";
 
