@@ -72,6 +72,8 @@ void Subgraph<k, Colored_>::construct()
             if(kmer_idx + k == len)
                 break;
 
+            const auto next_base = get_base(label, word_count, kmer_idx + k);
+            w.advance(next_base);
             kmer_idx++;
         }
     }
