@@ -29,9 +29,9 @@ private:
     uint8_t len_;   // Length of the super k-mer.
     uint16_t g_id_; // Graph ID of the super k-mer.
 
-    uint64_t h_f;   // Hash of the first k-mer in the forward-strand form.
-    uint64_t h_r;   // Hash of the first k-mer in the reverse-strand form.
-    uint64_t min;   // Minimizer-hash of the super k-mer.
+    // uint64_t h_f;   // Hash of the first k-mer in the forward-strand form.
+    // uint64_t h_r;   // Hash of the first k-mer in the reverse-strand form.
+    // uint64_t min;   // Minimizer-hash of the super k-mer.
 
 public:
 
@@ -50,6 +50,7 @@ public:
     // Returns the graph ID of the super k-mer.
     uint16_t g_id() const { return g_id_; }
 
+/*
     // Returns the hash of the first k-mer in the forward-strand form.
     auto hash_fwd() const { return h_f; }
 
@@ -58,6 +59,7 @@ public:
 
     // Returns the minimizer-hash of the super k-mer.
     auto min_hash() const { return min; }
+*/
 };
 
 
@@ -108,9 +110,11 @@ public:
 inline Super_Kmer_Attributes<false>::Super_Kmer_Attributes(std::size_t len, uint16_t g_id, uint64_t h_f, uint64_t h_r, uint64_t min):
       len_(len)
     , g_id_(g_id)
+/*
     , h_f(h_f)
     , h_r(h_r)
     , min(min)
+*/
 {}
 
 
