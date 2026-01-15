@@ -4,6 +4,7 @@
 
 
 
+#include "DNA.hpp"
 #include "DNA_Utility.hpp"
 #include "Kmer.hpp"
 
@@ -71,7 +72,11 @@ public:
     // initialized and is assumed to be computed externally.
     void init(const Kmer<k>& kmer);
 
-    // Advances the hasher in its underlying sequence by the nucleobase `ch` to
+    // Advances the hasher in its underlying sequence by the nucleobase `b` to
+    // the right.
+    void advance(DNA::Base b);
+
+    // Advances the hasher in its underlying sequence by the character `ch` to
     // the right.
     void advance(char ch);
 
@@ -120,10 +125,10 @@ inline void Rolling_Hash<k, canonical>::init(const Kmer<k>& kmer)
 
 
 template <uint16_t k, bool canonical>
-inline void Rolling_Hash<k, canonical>::advance(const char ch)
+inline void Rolling_Hash<k, canonical>::advance(const DNA::Base b)
 {
     const auto out = base[off];
-    base[off] = DNA_Utility::map_base(ch);
+    base[off] = b;
     const auto in = base[off];
     off = (off + 1 >= k ? 0 : off + 1);
 
@@ -134,6 +139,13 @@ inline void Rolling_Hash<k, canonical>::advance(const char ch)
         const auto i = DNA_Utility::complement(DNA::Base(in));
         h_r = rotr(h_r ^ s[o], 1) ^ rotl_km1[i];
     }
+}
+
+
+template <uint16_t k, bool canonical>
+inline void Rolling_Hash<k, canonical>::advance(const char ch)
+{
+    advance(DNA_Utility::map_base(ch));
 }
 
 

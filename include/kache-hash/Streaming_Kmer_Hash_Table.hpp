@@ -12,6 +12,7 @@
 #include "Minimizer_Iterator.hpp"
 #include "Concurrent_Hash_Table.hpp"
 #include "RW_Lock.hpp"
+#include "kache-hash/DNA.hpp"
 #include "utility.hpp"
 
 #include <cstdint>
@@ -353,12 +354,20 @@ public:
     }
 
     // Initializes the k-mer window at the beginning of the super k-mer encoding
-    // `label` that has `word_count` many words and is MSB-aligned. The
-    // minimizer is not initialized and is assumed to be computed externally.
-    void init(const uint64_t* label, const std::size_t word_count)
+    // `label` that has `word_count` many words and is MSB-aligned.
+    void init(const uint64_t* super_kmer, const std::size_t word_count)
     {
-        v.from_super_kmer(label, word_count);
+        v.from_super_kmer(super_kmer, word_count);
         rh.init(v.kmer());
+        min_it.reset(v.kmer());
+    }
+
+    // Advances the window by one k-mer, by the nucelobase `b`.
+    void advance(const DNA::Base b)
+    {
+        v.roll_forward(b);
+        min_it.advance(b);
+        rh.advance(b);
     }
 
     // Advances the window by one k-mer, by the character `ch`.
