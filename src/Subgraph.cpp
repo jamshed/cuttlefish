@@ -50,40 +50,21 @@ void Subgraph<k, Colored_>::construct()
     const auto word_count = super_kmer_it.super_kmer_word_count();  // Fixed number of words in a super k-mer label.
 
     Directed_Vertex<k> v;   // Current vertex in a scan over some super k-mer.
-    Kmer<k> pred_v; // Previous vertex in a scan.
 
     Super_Kmer_Attributes<Colored_> att;
     const label_unit_t* label;
-    source_id_t source = 0; // Source-ID of the current super k-mer.
     while(super_kmer_it.next(att, label))
     {
         const auto len = att.len();
-        assert(len >= k);
-        assert(len < 2 * (k - 1));
+        assert(len >= k && len < 2 * (k - 1));
         kmer_count_ += len - (k - 1);
 
-        if constexpr(Colored_)
-        {
-            // assert(att.source() >= source);
-            source = att.source();
-        }
 
         v.from_super_kmer(label, word_count);
         std::size_t kmer_idx = 0;
         while(true)
         {
             assert(kmer_idx + k - 1 < len);
-
-            const auto is_canonical = v.in_canonical_form();
-            const auto pred_base = (kmer_idx == 0 ? base_t::E : get_base(label, word_count, kmer_idx - 1));
-            const auto succ_base = (kmer_idx + k == len ? base_t::E : get_base(label, word_count, kmer_idx + k));
-            auto front = (is_canonical ? pred_base : DNA_Utility::complement(succ_base));
-            auto back  = (is_canonical ? succ_base : DNA_Utility::complement(pred_base));
-
-            if(CF_UNLIKELY(kmer_idx > 0 && v.canonical() == pred_v))    // Counter overcounting of self-loops.
-                (is_canonical ? front : back) = base_t::E;
-
-            edge_c += (succ_base != base_t::E);
 
             // Update hash table with the neighborhood info.
             // ht_router::update(M, v.canonical(),
@@ -94,18 +75,10 @@ void Subgraph<k, Colored_>::construct()
 
             if(kmer_idx + k == len)
                 break;
-/*
-            if((kmer_idx > 0 || !att.left_discontinuous()) && (kmer_idx + k < len || !att.right_discontinuous()))
-                assert(!st.is_discontinuity());
-*/
 
-            pred_v = v.canonical();
-            v.roll_forward(succ_base);
             kmer_idx++;
         }
     }
-
-    ht_router::flush_updates(M);
 }
 
 
@@ -181,6 +154,7 @@ void Subgraph<k, Colored_>::construct_loop_filtered()
 */
 
 
+/*
 template <uint16_t k, bool Colored_>
 void Subgraph<k, Colored_>::contract()
 {
@@ -483,15 +457,18 @@ void Subgraph<k, Colored_>::attach_colors_to_vertices()
 
     in_process.clear();
 }
+*/
 
 
 template <uint16_t k, bool Colored_>
 Subgraphs_Scratch_Space<k, Colored_>::Subgraphs_Scratch_Space(const std::size_t max_sz, const std::string& color_rel_bucket_pref):
       in_process_arr_(parlay::num_workers())
 {
-    map_ = new Padded<map_t*>[parlay::num_workers()];
+    M_ = new Padded<map_t*>[parlay::num_workers()];
+    token.resize(parlay::num_workers());
     for(std::size_t i = 0; i < parlay::num_workers(); ++i)
-        map_[i] = new map_t();
+        M_[i] = new map_t(),
+        token[i] = M_[i].unwrap()->register_user();
 
     if constexpr(Colored_)
     {
@@ -521,7 +498,7 @@ Subgraphs_Scratch_Space<k, Colored_>::Subgraphs_Scratch_Space(const std::size_t 
 template <uint16_t k, bool Colored_>
 auto Subgraphs_Scratch_Space<k, Colored_>::map() -> map_t&
 {
-    return *(map_[parlay::worker_id()].unwrap());
+    return *(M_[parlay::worker_id()].unwrap());
 }
 
 

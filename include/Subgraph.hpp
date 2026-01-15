@@ -20,6 +20,7 @@
 #include "dBG_Utilities.hpp"
 #include "utility.hpp"
 #include "globals.hpp"
+#include "kache-hash/Streaming_Kmer_Hash_Table.hpp"
 #include "unordered_dense/unordered_dense.h"
 
 #include <cstdint>
@@ -49,9 +50,7 @@ class Subgraphs_Scratch_Space
 {
 public:
 
-    // typedef std::unordered_map<Kmer<k>, State_Config, Kmer_Hasher<k>> map_t;
-    typedef ankerl::unordered_dense::map<Kmer<k>, State_Config<Colored_>, Kmer_Hasher<k>> map_t;
-    // typedef Kmer_Hashtable<k, Colored_> map_t;
+    typedef kache_hash::Streaming_Kmer_Hash_Table<k, false, uint64_t, 17> map_t;
 
     typedef std::pair<LMTig_Coord, uint64_t> in_process_t;  // Vertex's lm-tig coordinate and color-hash.
     typedef std::vector<in_process_t> in_process_arr_t;
@@ -112,7 +111,8 @@ public:
 
 private:
 
-    Padded<map_t*>* map_;   // Map collection for different workers.
+    Padded<map_t*>* M_;    // Map collection for different workers.
+    std::vector<Padded<typename map_t::Token>> token;   // `Token` to use each worker-specific map.
     // TODO: try thread-local allocation for map-space, e.g. from parlay.
 
     Color_Table M_c;    // Hashtable for color-sets.
@@ -415,6 +415,7 @@ inline base_t Subgraph<k, Colored_>::get_base(const label_unit_t* const super_km
 }
 
 
+/*
 template <uint16_t k, bool Colored_>
 inline bool Subgraph<k, Colored_>::extract_maximal_unitig(const Kmer<k>& v_hat, Maximal_Unitig_Scratch<k>& maximal_unitig, std::size_t& b, std::size_t& b_idx)
 {
@@ -569,6 +570,7 @@ inline void HT_Router<k, Colored_>::update(Kmer_Hashtable<k, Colored_>& HT, cons
 {
     HT.update(kmer, front, back, disc_0, disc_1);
 }
+*/
 
 }
 
